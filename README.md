@@ -2,7 +2,7 @@
 
 Type in your address and age, and the page ranks the nine Equinox clubs below 14th Street in Manhattan by how well each fits you.
 
-Open `index.html` in a browser, or turn on GitHub Pages for this repo to get a live link.
+Turn on GitHub Pages for this repo to get a live link (Settings → Pages → deploy from `main`). Opening `index.html` straight from your computer works too, but serve it through Pages for address search to be reliable.
 
 ## How the score works
 
@@ -14,7 +14,7 @@ Each club gets three parts, and you can weight each one with the sliders:
 | Walk | Straight-line distance × 1.25 for the street grid, at 3 mph; 10 minutes costs 0.5 points | Computed from your address |
 | Crowd age | Gap between your age and the median age of residents in the club's census tract; 10 years costs 1 point. Clubs with a big after-8pm crowd read slightly younger | Census ACS 2024 5-year (via Census Reporter), Google Maps Popular Times |
 
-Your address is turned into coordinates with OpenStreetMap's free Nominatim service. It's sent only for that lookup and isn't stored. If the lookup fails, pick a starting point from the dropdown.
+As you type an address, the page suggests matches using [Photon](https://photon.komoot.io), a free OpenStreetMap search service built for search-as-you-type. Your text is sent only for that lookup and isn't stored. The map uses [Leaflet](https://leafletjs.com) with CARTO's dark street tiles, over an embedded NYC shoreline so it still draws if the tiles can't load. Neither service needs a key.
 
 ## The data
 
