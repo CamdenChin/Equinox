@@ -773,14 +773,9 @@ ol.list{list-style:none;margin:0;padding:0}
 <div class="wrap">
   <div class="topbar"><div class="mark">Downtown Club Finder</div><div class="cap">Nine clubs below 14th St · Data Nov 2026</div></div>
 
-  <section class="hero">
-    <h1>Find your<br>club.</h1>
-    <p class="lede">Your address and age in, a ranking out. Each club is scored on its rating, the walk from your door, and how close its crowd runs to your age.</p>
-  </section>
-
-  <form id="f" novalidate>
+  <form id="f" novalidate style="margin-top:32px">
     <div class="row">
-      <div class="field grow ac"><label class="cap" for="addr">Address</label><input id="addr" type="text" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" placeholder="Start typing, e.g. 121 Mott St" value=""><ul class="sugg" id="sugg" role="listbox" hidden></ul></div>
+      <div class="field grow ac"><label class="cap" for="addr">Address</label><input id="addr" name="street-address" type="text" autocomplete="street-address" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" placeholder="Start typing, e.g. 121 Mott St" value=""><ul class="sugg" id="sugg" role="listbox" hidden></ul></div>
       <div class="field"><label class="cap" for="age">Age</label><input id="age" type="number" min="16" max="90" value="22"></div>
       <div class="field grow" style="flex-basis:220px"><label class="cap" for="preset">Or start from</label><select id="preset"></select></div>
       <button id="go" type="submit">Rank clubs</button>
