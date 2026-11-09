@@ -70,9 +70,9 @@ out["m1_no_greenwich"] = ols(rating[mask2], [year[mask2]], ["year_opened"])
 r_s, p_s = stats.spearmanr(year, rating); out["spearman_year"] = (r_s, p_s)
 
 # Personal score: quality minus commute penalty.
-# Quality = z-score of shrunk rating; each extra 10 min of walking each way costs 0.5 SD.
+# Quality = z-score of shrunk rating; each extra 10 min of walking costs 1 SD (0.16 stars). Doubling it to 0.2/min leaves the top three unchanged.
 z = (bayes - bayes.mean()) / bayes.std(ddof=0)
-score = z - 0.05 * walk_min
+score = z - 0.1 * walk_min
 order = np.argsort(-score)
 
 rows = []
