@@ -1,4 +1,4 @@
-# Downtown Equinox Finder
+# Downtown Equinox Club Finder
 
 Type in your address and age, and the page ranks the nine Equinox clubs below 14th Street in Manhattan by how well each fits you.
 
