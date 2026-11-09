@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Downtown Equinox Finder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single working column — inputs strip, then a ranked list beside a to-scale map of lower Manhattan; stacks on phones. */
+:root{
+  --bg:#f3f4f2; --panel:#ffffff; --ink:#171a19; --muted:#5d6461; --line:#dcdfdc;
+  --accent:#0b6e5a; --accent-soft:#d9ece6; --river:#dfe7ea; --good:#2f7d4f; --bad:#b0463b;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121514; --panel:#1a1e1d; --ink:#e9ecea; --muted:#9aa29e; --line:#2c3230;
+  --accent:#4fc2a4; --accent-soft:#1d3a33; --river:#1c2629; --good:#6cc08d; --bad:#e2867b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121514; --panel:#1a1e1d; --ink:#e9ecea; --muted:#9aa29e; --line:#2c3230;
+  --accent:#4fc2a4; --accent-soft:#1d3a33; --river:#1c2629; --good:#6cc08d; --bad:#e2867b; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+header{display:grid;gap:6px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,44px);line-height:1.05;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.lede{color:var(--muted);max-width:62ch;margin:0}
+form{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+.field{display:grid;gap:4px;min-width:0}
+.field.grow{flex:1 1 280px}
+label,.lab{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+input[type=text],input[type=number],select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 10px;min-width:0;width:100%}
+input[type=number]{width:90px}
+button{font:inherit;font-weight:600;background:var(--accent);color:var(--panel);border:0;border-radius:6px;padding:10px 16px;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.weights{display:flex;flex-wrap:wrap;gap:18px}
+.weights .field{flex:1 1 180px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.note{font-size:13px;color:var(--muted);margin:0}
+.note.warn{color:var(--bad)}
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+ol.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.club{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:8px}
+.club.top{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.head{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.rank{font-family:var(--display);font-weight:800;font-size:22px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:1.4em}
+.club.top .rank{color:var(--accent)}
+.name{font-family:var(--display);font-weight:700;font-size:19px;margin:0}
+.name a{color:inherit;text-decoration:none}
+.name a:hover{text-decoration:underline}
+.score{margin-left:auto;font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums}
+.pick{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:99px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.parts{display:grid;grid-template-columns:auto 1fr auto;gap:3px 10px;align-items:center;font-size:12px;font-family:var(--mono);color:var(--muted)}
+.bar{height:6px;background:var(--line);border-radius:3px;position:relative;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;border-radius:3px}
+.mapbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:820px){.mapbox{position:static}}
+svg text{font-family:var(--body)}
+.how{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px}
+.how h2{font-family:var(--display);font-size:18px;margin:0}
+.how p,.how li{margin:0;max-width:72ch;color:var(--muted);font-size:14px}
+.how ul{margin:0;padding-left:18px;display:grid;gap:4px}
+@media (prefers-reduced-motion:no-preference){.club{transition:border-color .2s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Equinox clubs below 14th Street · data as of Nov 8, 2026</div>
+    <h1>Which downtown Equinox should you join?</h1>
+    <p class="lede">Enter where you live and how old you are. The ranking weighs each club's Google rating, your walk, and how closely the neighborhood crowd matches your age.</p>
+  </header>
+
+  <form id="f" novalidate>
+    <div class="row">
+      <div class="field grow"><label for="addr">Your address</label><input id="addr" type="text" autocomplete="off" value="" placeholder="e.g. 70 Washington Square S, New York, NY"></div>
+      <div class="field"><label for="age">Your age</label><input id="age" type="number" min="16" max="90" value="22"></div>
+      <button id="go" type="submit">Rank clubs</button>
+    </div>
+    <div class="row">
+      <div class="field grow"><label for="preset">Or start from a spot</label>
+        <select id="preset"></select></div>
+    </div>
+    <div class="weights">
+      <div class="field"><label for="wq">Club quality</label><input id="wq" type="range" min="0" max="2" step="0.25" value="1"></div>
+      <div class="field"><label for="ww">Short walk</label><input id="ww" type="range" min="0" max="2" step="0.25" value="1"></div>
+      <div class="field"><label for="wa">Crowd near my age</label><input id="wa" type="range" min="0" max="2" step="0.25" value="1"></div>
+    </div>
+    <p class="note" id="status">Showing results from Washington Square Park. Enter your address to update.</p>
+  </form>
+
+  <div class="grid">
+    <ol class="list" id="list"></ol>
+    <div class="mapbox">
+      <div class="lab">Where the clubs are</div>
+      <svg id="map" viewBox="0 0 360 420" role="img" aria-label="Map of downtown Equinox clubs and your starting point"></svg>
+      <p class="note">Dot size shows rating. Your start is the ring.</p>
+    </div>
+  </div>
+
+  <section class="how">
+    <h2>How the score works</h2>
+    <ul>
+      <li><b>Quality:</b> Google rating, pulled toward the 3.62 group average when a club has few reviews, in standard deviations from the group.</li>
+      <li><b>Walk:</b> straight-line distance × 1.25 for the street grid, at 3 mph. Each 10 minutes costs half a point.</li>
+      <li><b>Crowd age:</b> median age of residents in the club's census tract (ACS 2024). Each 10 years between that and your age costs a point. Clubs with a big after-8pm crowd (Google Popular Times) read slightly younger.</li>
+    </ul>
+    <p>Members aren't residents, ratings are noisy, and nine clubs is a small set. Use this to pick which two clubs to try, then visit both at the hour you'd actually go.</p>
+  </section>
+</div>
+
+<script>
+const CLUBS=[
+ {name:"Hudson Square",addr:"75 Varick St",lat:40.7234536,lng:-74.0064248,rating:4.4,reviews:68,opened:2025,age:40.1,late:11,peak:"Thu 9am",perks:"steam, sauna, contrast showers",url:"https://www.equinox.com/clubs/new-york/downtown/hudson-square"},
+ {name:"Bond Street",addr:"0 Bond St",lat:40.7271457,lng:-73.9947863,rating:4.0,reviews:139,opened:2016,age:39.5,late:9,peak:"Tue 2pm",perks:"steam, cold shower, heated yoga",url:"https://www.equinox.com/clubs/new-york/downtown/bondst"},
+ {name:"Brookfield Place",addr:"225 Liberty St",lat:40.7127358,lng:-74.0149258,rating:3.8,reviews:135,opened:2015,age:39.3,late:6,peak:"Tue 11am",perks:"steam, boxing, river views",url:"https://www.equinox.com/clubs/new-york/downtown/brookfieldplace"},
+ {name:"Orchard Street",addr:"200 Orchard St",lat:40.7223554,lng:-73.9879141,rating:3.6,reviews:174,opened:2018,age:29.4,late:17,peak:"Mon 11am",perks:"steam, red light therapy, open till 11pm",url:"https://www.equinox.com/clubs/new-york/downtown/orchardst"},
+ {name:"Wall Street",addr:"14 Wall St",lat:40.7075383,lng:-74.0109028,rating:3.6,reviews:144,opened:2000,age:31.4,late:10,peak:"Mon 7pm",perks:"steam, sauna, hot plunge, cold shower",url:"https://www.equinox.com/clubs/new-york/downtown/wallstreet"},
+ {name:"Printing House",addr:"421 Hudson St",lat:40.72986,lng:-74.0072895,rating:3.6,reviews:229,opened:2011,age:36.2,late:6,peak:"Tue 4pm",perks:"steam, rooftop pool",url:"https://www.equinox.com/clubs/new-york/downtown/printinghouse"},
+ {name:"SoHo",addr:"69 Prince St",lat:40.7240841,lng:-73.9970289,rating:3.5,reviews:185,opened:2006,age:36.2,late:7,peak:"Tue 1pm",perks:"steam, spa",url:"https://www.equinox.com/clubs/new-york/downtown/soho"},
+ {name:"Tribeca",addr:"54 Murray St",lat:40.7141211,lng:-74.0098516,rating:3.4,reviews:114,opened:2003,age:35.1,late:8,peak:"Wed 2pm",perks:"steam, infrared sauna, cold shower",url:"https://www.equinox.com/clubs/new-york/downtown/tribeca"},
+ {name:"Greenwich Avenue",addr:"97 Greenwich Ave",lat:40.7375937,lng:-74.0019133,rating:3.3,reviews:223,opened:2004,age:36.4,late:15,peak:"Mon 7pm",perks:"steam, saltwater pool, boxing",url:"https://www.equinox.com/clubs/new-york/downtown/greenwichave"}
+];
+const PRESETS=[
+ ["Union Square",40.7359,-73.9911],["Washington Square Park",40.7308,-73.9973],
+ ["St Marks Place (East Village)",40.7290,-73.9876],["Tompkins Square Park",40.7265,-73.9815],["Christopher St (West Village)",40.7335,-74.0027],
+ ["Canal & Broadway",40.7190,-74.0010],["Chinatown (Mott St)",40.7158,-73.9970],["Two Bridges",40.7120,-73.9930],
+ ["Fulton St (FiDi)",40.7101,-74.0076],["Battery Park City",40.7116,-74.0161],["Chelsea (23rd & 8th)",40.7457,-73.9980]
+];
+const $=id=>document.getElementById(id);
+let home={lat:40.7308,lng:-73.9973,label:"Washington Square Park"};
+
+const sel=$("preset");
+sel.innerHTML='<option value="">Choose a starting point…</option>'+PRESETS.map((p,i)=>`<option value="${i}">${p[0]}</option>`).join("");
+
+function miles(a,b){const R=3958.8,r=Math.PI/180,dp=(b.lat-a.lat)*r,dl=(b.lng-a.lng)*r;
+  const h=Math.sin(dp/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+
+// shrunk rating: pull toward review-weighted mean with 100 phantom reviews
+const totalRev=CLUBS.reduce((s,c)=>s+c.reviews,0);
+const mean=CLUBS.reduce((s,c)=>s+c.rating*c.reviews,0)/totalRev;
+CLUBS.forEach(c=>c.shrunk=(100*mean+c.rating*c.reviews)/(100+c.reviews));
+const sm=CLUBS.reduce((s,c)=>s+c.shrunk,0)/CLUBS.length;
+const sd=Math.sqrt(CLUBS.reduce((s,c)=>s+(c.shrunk-sm)**2,0)/CLUBS.length);
+const lateMean=CLUBS.reduce((s,c)=>s+c.late,0)/CLUBS.length;
+
+function rank(){
+  const age=Math.min(90,Math.max(16,+$("age").value||22));
+  const wq=+$("wq").value, ww=+$("ww").value, wa=+$("wa").value;
+  return CLUBS.map(c=>{
+    const walk=miles(home,c)*1.25/3*60;
+    const crowdAge=c.age-(c.late-lateMean)*0.4; // busier late = reads a bit younger
+    const q=wq*(c.shrunk-sm)/sd, w=-ww*0.05*walk, a=-wa*Math.abs(age-crowdAge)/10;
+    return {...c,walk,crowdAge,q,w,a,score:q+w+a};
+  }).sort((x,y)=>y.score-x.score);
+}
+
+function bar(v,max,color){const pct=Math.min(50,Math.abs(v)/max*50);
+  return `<div class="bar"><i style="left:${v>=0?50:50-pct}%;width:${pct}%;background:${color}"></i><i style="left:50%;width:1px;background:var(--muted)"></i></div>`;}
+
+function render(){
+  const rows=rank();
+  const mx=Math.max(1,...rows.flatMap(r=>[Math.abs(r.q),Math.abs(r.w),Math.abs(r.a)]));
+  $("list").innerHTML=rows.map((r,i)=>`
+   <li class="club${i===0?' top':''}">
+     <div class="head"><span class="rank">${i+1}</span>
+       <h3 class="name"><a href="${r.url}" target="_blank" rel="noopener">${r.name}</a></h3>
+       ${i===0?'<span class="pick">Best fit</span>':''}
+       <span class="score">${r.score>=0?'+':''}${r.score.toFixed(2)}</span></div>
+     <div class="facts">
+       <span><b>${Math.round(r.walk)} min</b> walk</span>
+       <span><b>${r.rating.toFixed(1)}★</b> (${r.reviews} reviews)</span>
+       <span>residents' median age <b>${r.age}</b></span>
+       <span><b>${r.late}%</b> of weekday traffic after 8pm</span>
+       <span>opened <b>${r.opened}</b></span>
+       <span>${r.perks}</span>
+     </div>
+     <div class="parts">
+       <span>quality</span>${bar(r.q,mx,'var(--accent)')}<span>${r.q.toFixed(2)}</span>
+       <span>walk</span>${bar(r.w,mx,'var(--muted)')}<span>${r.w.toFixed(2)}</span>
+       <span>crowd</span>${bar(r.a,mx,'var(--muted)')}<span>${r.a.toFixed(2)}</span>
+     </div>
+   </li>`).join("");
+  drawMap(rows);
+}
+
+function drawMap(rows){
+  const pts=[...rows.map(r=>({lat:r.lat,lng:r.lng})),home];
+  const lat0=Math.min(...pts.map(p=>p.lat))-0.004, lat1=Math.max(...pts.map(p=>p.lat))+0.004;
+  const kx=Math.cos(40.72*Math.PI/180);
+  let lng0=Math.min(...pts.map(p=>p.lng))-0.006, lng1=Math.max(...pts.map(p=>p.lng))+0.006;
+  const W=360,H=420, spanY=lat1-lat0, spanX=(lng1-lng0)*kx, s=Math.min((W-20)/spanX,(H-20)/spanY);
+  const cx=(lng0+lng1)/2, cy=(lat0+lat1)/2;
+  const X=l=>W/2+(l-cx)*kx*s, Y=l=>H/2-(l-cy)*s;
+  const best=rows[0].name;
+  const labelSide=r=>X(r.lng)>W*0.62?'end':'start';
+  $("map").innerHTML=`<rect x="0" y="0" width="${W}" height="${H}" fill="var(--river)" rx="6"/>
+   ${rows.map(r=>{const isB=r.name===best;const rad=4+(r.rating-3.2)*7;const end=labelSide(r)==='end';
+     return `<g><circle cx="${X(r.lng).toFixed(1)}" cy="${Y(r.lat).toFixed(1)}" r="${rad.toFixed(1)}" fill="${isB?'var(--accent)':'var(--muted)'}" fill-opacity="${isB?1:.55}"><title>${r.name}: ${r.rating}★, ${Math.round(r.walk)} min</title></circle>
+     <text x="${(X(r.lng)+(end?-rad-4:rad+4)).toFixed(1)}" y="${(Y(r.lat)+4).toFixed(1)}" text-anchor="${end?'end':'start'}" font-size="11" font-weight="${isB?700:400}" fill="var(--ink)">${r.name}</text></g>`}).join("")}
+   <circle cx="${X(home.lng).toFixed(1)}" cy="${Y(home.lat).toFixed(1)}" r="7" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
+   <circle cx="${X(home.lng).toFixed(1)}" cy="${Y(home.lat).toFixed(1)}" r="2" fill="var(--ink)"/>`;
+}
+
+async function geocode(q){
+  const url="https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&viewbox=-74.03,40.77,-73.95,40.69&bounded=1&q="+encodeURIComponent(q);
+  const res=await fetch(url,{headers:{"Accept":"application/json"}});
+  if(!res.ok) throw new Error("lookup failed");
+  const j=await res.json(); if(!j.length) throw new Error("not found");
+  return {lat:+j[0].lat,lng:+j[0].lon,label:q};
+}
+
+$("f").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const q=$("addr").value.trim(); const st=$("status"); st.classList.remove("warn");
+  if(!q){render();return;}
+  st.textContent="Looking up your address…";
+  try{ home=await geocode(q); st.textContent=`Showing results from ${q}.`; }
+  catch(err){ st.classList.add("warn");
+    st.textContent="Couldn't look up that address here (it needs to be in lower Manhattan, and some viewers block lookups). Pick a starting point from the list instead."; }
+  render();
+});
+sel.addEventListener("change",()=>{const p=PRESETS[+sel.value]; if(!p)return;
+  home={lat:p[1],lng:p[2],label:p[0]}; $("addr").value=p[0]; $("status").classList.remove("warn");
+  $("status").textContent=`Showing results from ${p[0]}.`; render();});
+["age","wq","ww","wa"].forEach(id=>$(id).addEventListener("input",render));
+render();
+</script>
+</body>
+</html>
