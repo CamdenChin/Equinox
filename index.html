@@ -701,7 +701,13 @@ button:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
 .prefs legend{padding:0;margin-bottom:14px;color:var(--mute)}
 .pref{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:8px 24px;align-items:center}
 @media (max-width:640px){.pref{grid-template-columns:1fr}}
-.pref-label{font-size:15px}
+.pref-label{font-size:15px;display:grid;gap:2px}
+.pref-label small{font-size:12px;color:var(--dim)}
+.seg{transition:opacity .25s ease}
+.pref.off .seg{opacity:.3;pointer-events:none}
+.pref.off .pref-label{color:var(--mute)}
+.pref.off .pref-label small{color:var(--mute)}
+button.ghost .cap{font-size:10px;color:var(--mute)}
 .seg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line-2);max-width:520px}
 .seg label{position:relative;display:block;cursor:pointer}
 .seg label+label{border-left:1px solid var(--line-2)}
@@ -788,14 +794,14 @@ button.ghost[aria-expanded="true"] .chev{transform:rotate(-135deg) translateY(-1
       <button id="go" type="submit">Rank clubs</button>
     </div>
     <div class="toolbar">
-      <p class="note" id="status">Add your address to factor in walking time.</p>
-      <button type="button" class="ghost" id="prefsBtn" aria-expanded="false" aria-controls="prefsPanel"><span id="prefsSummary">Priorities</span><i class="chev" aria-hidden="true"></i></button>
+      <p class="note" id="status">Add your address to include walking time.</p>
+      <button type="button" class="ghost" id="prefsBtn" aria-expanded="false" aria-controls="prefsPanel"><span class="cap">Priorities</span><span id="prefsSummary"></span><i class="chev" aria-hidden="true"></i></button>
     </div>
     <div class="panel" id="prefsPanel" hidden>
       <fieldset class="prefs" id="prefs">
         <legend class="cap">How much should each matter?</legend>
         <div class="pref"><span class="pref-label" id="wq-l">A highly rated club</span><div class="seg" role="radiogroup" aria-labelledby="wq-l"><label><input type="radio" name="wq" value="0"><span>Off</span></label><label><input type="radio" name="wq" value="0.5"><span>Low</span></label><label><input type="radio" name="wq" value="1" checked><span>Medium</span></label><label><input type="radio" name="wq" value="1.5"><span>High</span></label><label><input type="radio" name="wq" value="2"><span>Max</span></label></div></div>
-        <div class="pref"><span class="pref-label" id="ww-l">A short walk</span><div class="seg" role="radiogroup" aria-labelledby="ww-l"><label><input type="radio" name="ww" value="0" checked><span>Off</span></label><label><input type="radio" name="ww" value="0.5"><span>Low</span></label><label><input type="radio" name="ww" value="1"><span>Medium</span></label><label><input type="radio" name="ww" value="1.5"><span>High</span></label><label><input type="radio" name="ww" value="2"><span>Max</span></label></div></div>
+        <div class="pref"><span class="pref-label" id="ww-l">A short walk<small id="ww-hint">Add an address to use</small></span><div class="seg" role="radiogroup" aria-labelledby="ww-l"><label><input type="radio" name="ww" value="0"><span>Off</span></label><label><input type="radio" name="ww" value="0.5"><span>Low</span></label><label><input type="radio" name="ww" value="1" checked><span>Medium</span></label><label><input type="radio" name="ww" value="1.5"><span>High</span></label><label><input type="radio" name="ww" value="2"><span>Max</span></label></div></div>
         <div class="pref"><span class="pref-label" id="wa-l">People around my age</span><div class="seg" role="radiogroup" aria-labelledby="wa-l"><label><input type="radio" name="wa" value="0"><span>Off</span></label><label><input type="radio" name="wa" value="0.5"><span>Low</span></label><label><input type="radio" name="wa" value="1" checked><span>Medium</span></label><label><input type="radio" name="wa" value="1.5"><span>High</span></label><label><input type="radio" name="wa" value="2"><span>Max</span></label></div></div>
       </fieldset>
     </div>
@@ -861,10 +867,13 @@ function rank(){
 
 const LEVELS={"0":"Off","0.5":"Low","1":"Medium","1.5":"High","2":"Max"};
 function summarize(){
-  const parts=[["wq","Rating"],["ww","Walk"],["wa","Age"]].map(([n,l])=>{
-    if(n==="ww"&&!home) return `${l} off until you add an address`;
-    return `${l} ${LEVELS[document.querySelector(`input[name="${n}"]:checked`).value].toLowerCase()}`;});
-  $("prefsSummary").textContent="Priorities: "+parts.join(" · ");
+  const parts=[["wq","Rating"],["ww","Walk"],["wa","Age"]].filter(([n])=>n!=="ww"||home)
+    .map(([n,l])=>`${l} ${LEVELS[document.querySelector(`input[name="${n}"]:checked`).value].toLowerCase()}`);
+  $("prefsSummary").textContent=parts.join(" · ");
+  // The walk row waits for an address: dimmed and locked until there's somewhere to walk from.
+  const row=$("ww-l").closest(".pref"); row.classList.toggle("off",!home);
+  row.querySelectorAll("input").forEach(i=>i.disabled=!home);
+  $("ww-hint").hidden=!!home;
 }
 
 const fmt=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(1);
@@ -979,11 +988,10 @@ function showSugg(){
 function cancelSearch(){clearTimeout(timer); if(ctrl){ctrl.abort(); ctrl=null;} suggs=[];}
 function choose(s){
   if(!s) return; cancelSearch(); closeSugg();
-  const first=!home; home={lat:s.lat,lng:s.lng,label:s.label}; addr.value=s.label;
+  home={lat:s.lat,lng:s.lng,label:s.label}; addr.value=s.label;
   // Jump to the city of the nearest club, and start counting the walk once there's an address.
   const near=CLUBS.slice().sort((a,b)=>miles(home,a)-miles(home,b))[0];
   if($("metro").value!=="__all") $("metro").value=near.metro;
-  if(first&&W("ww")===0) document.querySelector('input[name="ww"][value="1"]').checked=true;
   st.classList.remove("warn");
   st.textContent=miles(home,near)>30?`Showing results from ${s.label}. The nearest Equinox is ${Math.round(miles(home,near)).toLocaleString()} miles away, in ${near.metro}.`:`Showing results from ${s.label}.`;
   render();
