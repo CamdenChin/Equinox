@@ -211,7 +211,7 @@ function drawMap(rows){
 }
 
 async function geocode(q){
-  const url="https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&viewbox=-74.03,40.77,-73.95,40.69&bounded=1&q="+encodeURIComponent(q);
+  const url="https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&viewbox=-74.03,40.77,-73.95,40.69&q="+encodeURIComponent(q);
   const res=await fetch(url,{headers:{"Accept":"application/json"}});
   if(!res.ok) throw new Error("lookup failed");
   const j=await res.json(); if(!j.length) throw new Error("not found");
@@ -225,7 +225,7 @@ $("f").addEventListener("submit",async e=>{
   st.textContent="Looking up your address…";
   try{ home=await geocode(q); st.textContent=`Showing results from ${q}.`; }
   catch(err){ st.classList.add("warn");
-    st.textContent="Couldn't look up that address here (it needs to be in lower Manhattan, and some viewers block lookups). Pick a starting point from the list instead."; }
+    st.textContent="Couldn't look up that address here (check the spelling, or this view may block address lookups). Pick a starting point from the list instead."; }
   render();
 });
 sel.addEventListener("change",()=>{const p=PRESETS[+sel.value]; if(!p)return;
