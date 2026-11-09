@@ -67,6 +67,10 @@ for k in ["late_share","evening_share","morning_share","midday_share","avg_load"
 # Do the two stand-ins agree? Neighborhood age (y) on after-8pm share (x)
 r = stats.linregress([out[n]["late_share"] for n in names], [nbhd_age[n] for n in names])
 print(f"nbhd_median_age ~ late_share: slope {r.slope:.1f} yrs per unit share R2 {r.rvalue**2:.2f} p {r.pvalue:.3f}")
+# Youth score: z-score of after-8pm share plus z-score of (negated) neighborhood age, averaged
+L = np.array([out[n]["late_share"] for n in names]); A = np.array([nbhd_age[n] for n in names])
+youth = ((L - L.mean()) / L.std(ddof=1) - (A - A.mean()) / A.std(ddof=1)) / 2
+for i in np.argsort(-youth): out[names[i]]["youth_score"] = youth[i]; print(f"youth {names[i]:17s} {youth[i]:+.2f}")
 for n in sorted(names, key=lambda n: -out[n]["midday_share"]):
     o = out[n]; print(f"{n:17s} morn {o['morning_share']:.2f} mid {o['midday_share']:.2f} eve {o['evening_share']:.2f} late {o['late_share']:.2f} load {o['avg_load']:.0f} peak {o['peak']} quiet {o['quietest_weekday_hour']} 6-8pm {o['wk_6_8pm']:.0f}")
 json.dump(out, open("popular_times.json", "w"), indent=1, default=float)
