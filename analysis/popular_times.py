@@ -56,9 +56,17 @@ for club, days in data.items():
                  "avg_load": load, "peak": f"{DAYS[pk[0]]} {pk[1]}:00", "quietest_weekday_hour": quiet,
                  "wk_6_8pm": float(wk[:, 18:20].mean()), "weekday_profile": wkavg.round(0).tolist()}
 names = list(out)
-for k in ["evening_share","morning_share","midday_share","avg_load"]:
+# Median age of residents in each club's census tract (ACS 2024 5-year, table B01002)
+nbhd_age = {"Hudson Square":40.1,"Bond Street":39.5,"Orchard Street":29.4,"SoHo":36.2,"Printing House":36.2,
+            "Wall Street":31.4,"Tribeca":35.1,"Brookfield Place":39.3,"Greenwich Avenue":36.4}
+for n in names: out[n]["nbhd_median_age"] = nbhd_age[n]
+# One regression per crowd measure: rating (y) on that measure alone (x), nine clubs
+for k in ["late_share","evening_share","morning_share","midday_share","avg_load","nbhd_median_age"]:
     x = np.array([out[n][k] for n in names]); y = np.array([rating[n] for n in names])
     r = stats.linregress(x, y); print(f"rating ~ {k}: slope {r.slope:.2f} R2 {r.rvalue**2:.2f} p {r.pvalue:.3f}")
+# Do the two stand-ins agree? Neighborhood age (y) on after-8pm share (x)
+r = stats.linregress([out[n]["late_share"] for n in names], [nbhd_age[n] for n in names])
+print(f"nbhd_median_age ~ late_share: slope {r.slope:.1f} yrs per unit share R2 {r.rvalue**2:.2f} p {r.pvalue:.3f}")
 for n in sorted(names, key=lambda n: -out[n]["midday_share"]):
     o = out[n]; print(f"{n:17s} morn {o['morning_share']:.2f} mid {o['midday_share']:.2f} eve {o['evening_share']:.2f} late {o['late_share']:.2f} load {o['avg_load']:.0f} peak {o['peak']} quiet {o['quietest_weekday_hour']} 6-8pm {o['wk_6_8pm']:.0f}")
 json.dump(out, open("popular_times.json", "w"), indent=1, default=float)
