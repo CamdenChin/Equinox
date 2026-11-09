@@ -803,7 +803,7 @@ ol.list{list-style:none;margin:0;padding:0}
 
   <section class="how">
     <div><h3 class="cap">Quality</h3><p>The quality score starts from each club's Google rating. Clubs with only a few reviews are pulled toward the average rating of all nine clubs, which is 3.62 stars, so that a handful of glowing reviews does not put a new club at the top. The adjusted rating is then compared with the other clubs, and a club that rates well above the group gets a positive score.</p></div>
-    <div><h3 class="cap">Walk</h3><p>The walk score estimates how long it takes to walk from your address to each club. It measures the straight-line distance, adds 25 percent to account for the street grid, and assumes a walking pace of three miles per hour. Each ten minutes of walking lowers a club's score by half a point.</p></div>
+    <div><h3 class="cap">Walk</h3><p>The walk score estimates how long it takes to walk from your address to each club. It measures the straight-line distance, adds 25 percent to account for the street grid, and assumes a walking pace of three miles per hour. Each ten minutes of walking lowers a club's score by one point, so a club twenty minutes farther away needs to be clearly better to come out ahead.</p></div>
     <div><h3 class="cap">Crowd age</h3><p>The crowd age score compares your age with the median age of the people who live in each club's census tract, using the Census Bureau's 2024 American Community Survey. Each ten years of difference lowers a club's score by one point. Clubs where Google shows a large share of visits after 8pm are treated as having a slightly younger crowd.</p></div>
   </section>
   <p class="fine">This is an independent project and is not affiliated with Equinox. The people who live near a club are not necessarily its members, Google ratings reflect billing and staff experiences as well as the gym itself, and nine clubs is a small sample. The best use of this ranking is to choose two clubs to try in person at the time of day you would normally work out.</p>
@@ -852,7 +852,7 @@ function rank(){
   return CLUBS.map(c=>{
     const walk=miles(home,c)*1.25/3*60;
     const crowdAge=c.age-(c.late-lateMean)*0.4;
-    const q=wq*(c.shrunk-sm)/sd, w=-ww*0.05*walk, a=-wa*Math.abs(age-crowdAge)/10;
+    const q=wq*(c.shrunk-sm)/sd, w=-ww*0.1*walk, a=-wa*Math.abs(age-crowdAge)/10;
     return {...c,walk,crowdAge,q,w,a,score:q+w+a};
   }).sort((x,y)=>y.score-x.score);
 }
