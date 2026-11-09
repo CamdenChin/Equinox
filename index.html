@@ -710,6 +710,7 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 input[type=range]:focus-visible{outline:1px solid var(--mute);outline-offset:4px}
 .note{font-size:13px;color:var(--mute);margin:0}
 .note.warn{color:#e0a39a}
+[hidden]{display:none!important}
 .ac{position:relative}
 .sugg{position:absolute;left:0;right:0;top:calc(100% + 2px);z-index:1000;list-style:none;margin:0;padding:0;background:var(--raise);border:1px solid var(--line-2);display:grid;max-height:280px;overflow-y:auto}
 .sugg li{padding:11px 14px;cursor:pointer;display:grid;gap:2px;min-width:0;border-bottom:1px solid var(--line)}
@@ -895,9 +896,12 @@ function initMap(){
   map=L.map("map",{zoomControl:true,attributionControl:true,scrollWheelZoom:false,zoomSnap:0.25}).setView([40.72,-74.0],14);
   map.createPane("land"); map.getPane("land").style.zIndex=150;
   L.geoJSON(LAND,{pane:"land",interactive:false,style:{color:"#2a2a2a",weight:1,fillColor:"#141414",fillOpacity:1}}).addTo(map);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:19,
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(map);
-  HOODS.forEach(h=>L.marker([h[1],h[2]],{interactive:false,keyboard:false,icon:L.divIcon({className:"hood",html:h[0],iconSize:null})}).addTo(map));
+  const ESRI="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/";
+  const base=L.tileLayer(ESRI+"World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",{maxZoom:16,attribution:'Tiles &copy; <a href="https://www.esri.com" target="_blank" rel="noopener">Esri</a>, HERE, Garmin, &copy; OpenStreetMap contributors'}).addTo(map);
+  L.tileLayer(ESRI+"World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",{maxZoom:16}).addTo(map);
+  // Our own neighborhood labels show only when street tiles can't load (e.g. inside the Claude preview).
+  const hoods=L.layerGroup(HOODS.map(h=>L.marker([h[1],h[2]],{interactive:false,keyboard:false,icon:L.divIcon({className:"hood",html:h[0],iconSize:null})}))).addTo(map);
+  base.once("tileload",()=>map.removeLayer(hoods));
   layer=L.layerGroup().addTo(map);
 }
 function drawMap(){
@@ -920,7 +924,7 @@ function drawMap(){
 $("list").addEventListener("click",e=>{
   if(e.target.closest("a")||!map) return;
   const li=e.target.closest(".club"); if(!li) return; const m=markers[li.dataset.name]; if(!m) return;
-  map.flyTo(m.getLatLng(),16,{duration:0.6}); $("map").scrollIntoView({behavior:"smooth",block:"nearest"});
+  map.flyTo(m.getLatLng(),15.5,{duration:0.6}); $("map").scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 
 // Address search: Photon (OpenStreetMap data, built for search-as-you-type), limited to New York.
@@ -949,8 +953,9 @@ function showSugg(){
   list.hidden=false; addr.setAttribute("aria-expanded","true");
   if(active>=0) addr.setAttribute("aria-activedescendant","opt"+active); else addr.removeAttribute("aria-activedescendant");
 }
+function cancelSearch(){clearTimeout(timer); if(ctrl){ctrl.abort(); ctrl=null;} suggs=[];}
 function choose(s){
-  home={lat:s.lat,lng:s.lng,label:s.label}; addr.value=s.label; closeSugg();
+  if(!s) return; cancelSearch(); home={lat:s.lat,lng:s.lng,label:s.label}; addr.value=s.label; closeSugg(); sel.value="";
   st.classList.remove("warn"); st.textContent=`Showing results from ${s.label}.`; render();
 }
 function lookupFailed(){st.classList.add("warn");
@@ -960,8 +965,10 @@ addr.addEventListener("input",()=>{
   clearTimeout(timer); const q=addr.value.trim();
   if(q.length<3){suggs=[];closeSugg();return;}
   timer=setTimeout(async()=>{
-    if(ctrl) ctrl.abort(); ctrl=new AbortController();
-    try{ suggs=await searchAddress(q,6,ctrl.signal); active=-1; showSugg(); }
+    if(ctrl) ctrl.abort(); const mine=ctrl=new AbortController();
+    try{ const r=await searchAddress(q,6,mine.signal);
+      if(mine!==ctrl||addr.value.trim()!==q||document.activeElement!==addr) return; // stale answer: the user already picked or moved on
+      suggs=r; active=-1; showSugg(); }
     catch(err){ if(err.name!=="AbortError"){suggs=[];closeSugg();} }
   },250);
 });
@@ -974,9 +981,10 @@ addr.addEventListener("keydown",e=>{
 });
 list.addEventListener("mousedown",e=>{const li=e.target.closest("li"); if(li){e.preventDefault(); choose(suggs[+li.dataset.i]);}});
 addr.addEventListener("blur",()=>setTimeout(closeSugg,120));
+document.addEventListener("mousedown",e=>{if(!e.target.closest(".ac")) closeSugg();});
 
 $("f").addEventListener("submit",async e=>{
-  e.preventDefault(); closeSugg();
+  e.preventDefault(); cancelSearch(); closeSugg();
   const q=addr.value.trim(); st.classList.remove("warn");
   if(!q||q===home.label){render();return;}
   st.textContent="Looking up your address…";
@@ -984,7 +992,7 @@ $("f").addEventListener("submit",async e=>{
   catch(err){ lookupFailed(); render(); }
 });
 sel.addEventListener("change",()=>{const p=PRESETS[+sel.value]; if(!p)return;
-  home={lat:p[1],lng:p[2],label:p[0]}; addr.value=p[0]; st.classList.remove("warn");
+  cancelSearch(); closeSugg(); home={lat:p[1],lng:p[2],label:p[0]}; addr.value=p[0]; st.classList.remove("warn");
   st.textContent=`Showing results from ${p[0]}.`; render();});
 ["age","wq","ww","wa"].forEach(id=>$(id).addEventListener("input",render));
 initMap();

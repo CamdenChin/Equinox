@@ -14,7 +14,7 @@ Each club gets three parts, and you can weight each one with the sliders:
 | Walk | Straight-line distance × 1.25 for the street grid, at 3 mph; 10 minutes costs 0.5 points | Computed from your address |
 | Crowd age | Gap between your age and the median age of residents in the club's census tract; 10 years costs 1 point. Clubs with a big after-8pm crowd read slightly younger | Census ACS 2024 5-year (via Census Reporter), Google Maps Popular Times |
 
-As you type an address, the page suggests matches using [Photon](https://photon.komoot.io), a free OpenStreetMap search service built for search-as-you-type. Your text is sent only for that lookup and isn't stored. The map uses [Leaflet](https://leafletjs.com) with CARTO's dark street tiles, over an embedded NYC shoreline so it still draws if the tiles can't load. Neither service needs a key.
+As you type an address, the page suggests matches using [Photon](https://photon.komoot.io), a free OpenStreetMap search service built for search-as-you-type. Your text is sent only for that lookup and isn't stored. The map uses [Leaflet](https://leafletjs.com) with Esri's dark gray street tiles, over an embedded NYC shoreline so it still draws if the tiles can't load. Neither service needs a key.
 
 ## The data
 
