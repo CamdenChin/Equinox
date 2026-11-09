@@ -1,0 +1,124 @@
+region	city	name	lat	lng	rating	reviews	age	path
+Boston	Boston	Chestnut Hill	42.318895	-71.175119	3.7	118	35.1	boston/chestnuthill
+Boston	Boston	Dartmouth Street	42.347018	-71.074896	3.5	110	41.2	boston/dartmouth
+Boston	Boston	Fenway Boston	42.344225	-71.102191		0	26.5	boston/fenway-boston
+Boston	Boston	Franklin Street	42.35597	-71.053955	4.2	72	46.7	boston/franklinst
+Boston	Boston	Seaport	42.353322	-71.047681	4.1	136	46.9	boston/seaport
+Boston	Boston	Sports Club Boston	42.353014	-71.063256	3.5	167	35.7	boston/sportsclubboston
+Canada	Toronto	Bay Street	43.648087	-79.379662	3.8	255		canada/toronto/bayst
+Canada	Toronto	Yorkville	43.671152	-79.394862	3.4	243		canada/toronto/yorkville
+Canada	Toronto	King West	43.64288	-79.402526	3.4	46		canada/toronto/king-west
+Canada	Vancouver	West Georgia Street	49.286273	-123.123596	4.2	709		canada/vancouver/westgeorgiast
+Chicago	Chicago	Gold Coast	41.899802	-87.62437	3.8	159	42.2	chicago/goldcoast
+Chicago	Chicago	Lincoln Common	41.924884	-87.647794	3.9	159	29.5	chicago/lincolncommon
+Chicago	Chicago	Lincoln Park	41.914145	-87.633797	3.0	111	29.9	chicago/lincolnpark
+Chicago	Chicago	The Loop	41.880869	-87.634299	4.1	125	30.8	chicago/loop
+Chicago	Chicago	Fulton Market	41.88582	-87.650776	3.8	68	32.8	chicago/fulton-market
+Connecticut	Darien	Darien	41.069993	-73.492719	4.0	75	38.4	connecticut/darien
+Connecticut	Greenwich	E at Greenwich	41.020067	-73.634568	3.9	67	42.8	connecticut/e-greenwich-ct
+Connecticut	Greenwich	Greenwich	41.020067	-73.634568	3.9	67	42.8	connecticut/greenwich-ct
+Connecticut	Southport	Southport	41.138821	-73.286579	4.3	86	51.1	connecticut/southport
+Florida	Aventura	Aventura	25.957441	-80.144228	3.1	215	40.5	florida/aventura
+Florida	Miami	Brickell	25.759208	-80.192242	3.5	169	42.9	florida/brickell
+Florida	Miami	Brickell Heights	25.765564	-80.193664	3.5	227	33.6	florida/brickellheights
+Florida	Coral Gables	Coral Gables	25.731815	-80.260779	3.7	123	40.8	florida/coralgables
+Florida	Miami Beach	South Beach	25.774964	-80.133106	4.0	291	45.8	florida/southbeach
+Florida	West Palm Beach	West Palm Beach	26.708973	-80.057376	3.1	77	54.0	florida/westpalmbeach
+London	London	Bishopsgate	51.515291	-0.081107	3.8	94		london/bishopsgate
+London	London	E St. James's	51.506187	-0.138633	3.9	101		london/stjames
+London	London	Kensington	51.50104	-0.191408	3.7	293		london/kensington
+Michigan	Bloomfield Hills	Bloomfield Hills	42.543894	-83.283305	3.7	182	49.1	michigan/bloomfieldhills
+New Jersey	Paramus	Paramus	40.972916	-74.079865	4.0	121	54.1	new-jersey/paramus
+New Jersey	Summit	Summit	40.732353	-74.375098	3.8	141	41.4	new-jersey/summit
+New York	Manhattan	Columbus Circle	40.768553	-73.983187	3.5	275	43.3	new-york/uptown/columbuscircle
+New York	Manhattan	East 61st Street	40.761031	-73.962019	3.5	186	43.9	new-york/uptown/east61st
+New York	Manhattan	East 63rd Street	40.764478	-73.96616	3.2	198	46.9	new-york/uptown/east63rd
+New York	Manhattan	East 74th Street	40.770535	-73.957465	3.2	135	43.5	new-york/uptown/east74th
+New York	Manhattan	East 85th Street	40.778117	-73.954063	3.6	106	41.9	new-york/uptown/east85th
+New York	Manhattan	East 92nd Street	40.782718	-73.950477	3.7	188	39.2	new-york/uptown/east92nd
+New York	Manhattan	Sports Club New York	40.774501	-73.981276	3.5	282	44.0	new-york/uptown/sportsclubnewyork
+New York	Manhattan	West 76th Street	40.781525	-73.979889	3.2	143	45.5	new-york/uptown/west76th
+New York	Manhattan	West 92nd Street	40.791944	-73.974325	3.9	245	43.0	new-york/uptown/west92nd
+New York	Manhattan	Bryant Park	40.754686	-73.985472	3.9	166	45.2	new-york/midtown/bryantpark
+New York	Manhattan	East 43rd Street	40.754131	-73.979883	4.0	58	36.7	new-york/midtown/east43rd
+New York	Manhattan	East 44th Street	40.752508	-73.975466	3.9	81	38.7	new-york/midtown/east44th
+New York	Manhattan	East 53rd Street	40.759757	-73.975379	3.5	38	44.1	new-york/midtown/east53rd
+New York	Manhattan	East 54th Street	40.757525	-73.96726	3.1	94	44.8	new-york/midtown/east54th
+New York	Manhattan	Hudson Yards	40.754623	-74.002205	3.8	609	33.9	new-york/midtown/hudsonyards
+New York	Manhattan	Park Avenue	40.745884	-73.981507	3.5	116	35.5	new-york/midtown/park
+New York	Manhattan	Rockefeller Center	40.759179	-73.978065	4.2	212	42.6	new-york/midtown/rockefeller
+New York	Manhattan	West 50th Street	40.762085	-73.984616	3.2	95	38.3	new-york/midtown/west50th
+New York	Manhattan	Terminal Warehouse	40.751898	-74.005039		0	33.9	new-york/midtown/terminal-warehouse
+New York	Manhattan	Bond Street	40.727146	-73.994786	4.0	139	35.1	new-york/downtown/bondst
+New York	Manhattan	Brookfield Place	40.712736	-74.014926	3.8	135	35.5	new-york/downtown/brookfieldplace
+New York	Manhattan	Flatiron	40.739073	-73.990263	3.9	241	35.7	new-york/downtown/flatiron
+New York	Manhattan	Gramercy	40.740549	-73.985555	3.8	117	35.9	new-york/downtown/gramercy
+New York	Manhattan	Greenwich Avenue	40.737594	-74.001913	3.3	223	41.9	new-york/downtown/greenwichave
+New York	Manhattan	High Line	40.74383	-74.006725	3.7	140	40.1	new-york/downtown/highline
+New York	Manhattan	Orchard Street	40.722355	-73.987914	3.6	174	33.3	new-york/downtown/orchardst
+New York	Manhattan	Printing House	40.72986	-74.007289	3.6	229	39.7	new-york/downtown/printinghouse
+New York	Manhattan	SoHo	40.724084	-73.997029	3.5	185	36.7	new-york/downtown/soho
+New York	Manhattan	Tribeca	40.714121	-74.009852	3.4	114	36.0	new-york/downtown/tribeca
+New York	Manhattan	Wall Street	40.707538	-74.010903	3.6	144	33.4	new-york/downtown/wallstreet
+New York	Manhattan	NoMad	40.744902	-73.989461	4.1	136	37.3	new-york/downtown/nomad
+New York	Manhattan	Hudson Square	40.723454	-74.006425	4.4	68	41.8	new-york/downtown/hudson-square
+New York	Brooklyn	Brooklyn Heights	40.692479	-73.991411	3.3	158	35.2	new-york/brooklyn/brooklynheights
+New York	Brooklyn	DUMBO	40.702671	-73.988823	4.2	125	41.6	new-york/brooklyn/dumbo
+New York	Brooklyn	Williamsburg	40.715965	-73.959883	3.2	265	32.7	new-york/brooklyn/williamsburg
+New York	Brooklyn	Domino	40.714807	-73.967398	3.2	192	38.0	new-york/brooklyn/domino
+New York	Long Island	Great Neck	40.791488	-73.709123	3.3	139	46.4	new-york/long-island/greatneck
+New York	Long Island	Roslyn	40.80825	-73.628877	3.9	51	40.0	new-york/long-island/roslyn
+New York	Long Island	Woodbury	40.811476	-73.489067	4.2	111	47.0	new-york/long-island/woodbury
+New York	Long Island	Hamptons	40.939714	-72.311527	4.3	92	53.8	new-york/long-island/hamptons
+New York	Westchester	Armonk	41.120753	-73.708624	4.5	44	42.8	new-york/westchester/armonk
+New York	Westchester	Mamaroneck	40.939636	-73.743281	4.4	54	40.9	new-york/westchester/mamaroneck
+New York	Westchester	Scarsdale	40.975083	-73.802289	3.9	69	43.1	new-york/westchester/scarsdale
+Philadelphia	Philadelphia	Rittenhouse	39.950564	-75.172868	3.7	93	38.7	pennsylvania/rittenhouse
+Northern California	San Francisco	Beale Street	37.791025	-122.39634	3.6	61	40.8	northern-california/bealest
+Northern California	Berkeley	Berkeley	37.861454	-122.267552	3.8	225	29.5	northern-california/berkeley
+Northern California	Palo Alto	Palo Alto	37.422002	-122.138124	3.1	226	42.0	northern-california/paloalto
+Northern California	San Francisco	Pine Street	37.791857	-122.401286	3.9	132	49.1	northern-california/pinest
+Northern California	San Mateo	San Mateo	37.562204	-122.324683	3.2	114	39.8	northern-california/sanmateo
+Northern California	San Ramon	San Ramon	37.763361	-121.959933	3.7	92	41.8	northern-california/sanramon
+Northern California	San Francisco	Sports Club San Francisco	37.78662	-122.40439	3.5	311	46.3	northern-california/sportsclubsanfrancisco
+Northern California	San Francisco	Union Street	37.797122	-122.433098	3.6	126	38.1	northern-california/unionstreet
+Northern California	San Francisco	Van Mission	37.773488	-122.418454	4.0	145	35.1	northern-california/vanmission
+Southern California	Los Angeles	Beverly Hills	34.067819	-118.403733	3.7	118	50.1	southern-california/los-angeles/beverlyhills
+Southern California	Los Angeles	Century City	34.060118	-118.419376	3.0	138	51.4	southern-california/los-angeles/centurycity
+Southern California	Los Angeles	Culver City	34.020659	-118.397987	4.0	153	37.7	southern-california/los-angeles/culvercity
+Southern California	Los Angeles	Downtown LA	34.051561	-118.254992	3.5	116	39.6	southern-california/los-angeles/downtownla
+Southern California	Los Angeles	Hollywood	34.099579	-118.326117	3.5	274	35.1	southern-california/los-angeles/hollywood
+Southern California	Los Angeles	Miracle Mile	34.06209	-118.354484	3.8	119	37.8	southern-california/los-angeles/miraclemile
+Southern California	Los Angeles	Santa Monica	34.015349	-118.496934	3.4	188	35.7	southern-california/los-angeles/santamonica
+Southern California	Los Angeles	Sports Club Los Angeles	34.045378	-118.44287	3.2	232	35.9	southern-california/los-angeles/losangeles
+Southern California	Los Angeles	West Hollywood	34.092402	-118.378726	3.5	188	44.6	southern-california/los-angeles/westhollywood
+Southern California	Los Angeles	Westwood	34.05782	-118.446029	3.6	133	36.7	southern-california/los-angeles/westwood
+Southern California	Los Angeles	Pacific Palisades	34.039242	-118.555488	4.3	23	46.6	southern-california/pacific-palisades
+Southern California	Los Angeles	Santa Monica East	34.018174	-118.490064		0	40.4	southern-california/los-angeles/santa-monica-east
+Southern California	Los Angeles	Burbank	34.152127	-118.336434	4.5	43	34.8	southern-california/the-valley/burbank
+Southern California	Los Angeles	Playa Vista	33.983239	-118.397073	4.7	12	40.0	southern-california/los-angeles/playa-vista
+Southern California	Orange County	Huntington Beach	33.655634	-117.998755	4.0	131	47.4	southern-california/orange-county/huntingtonbeach
+Southern California	Orange County	Newport Beach	33.659039	-117.860356	3.4	91	33.5	southern-california/orange-county/newportbeach
+Southern California	Orange County	Sports Club Orange County	33.68361	-117.854403	3.4	229	31.8	southern-california/orange-county/orangecounty
+Southern California	San Diego	La Costa	33.084558	-117.26752	3.9	127	50.7	southern-california/san-diego/lacosta
+Southern California	San Diego	Downtown San Diego	32.712902	-117.172391	3.9	84	45.1	southern-california/san-diego/downtown
+Southern California	Los Angeles	Marina del Rey	33.986794	-118.442048	3.5	118	39.3	southern-california/south-bay/marina
+Southern California	Los Angeles	Palos Verdes	33.772974	-118.373998	3.3	80	52.4	southern-california/south-bay/palosverdes
+Southern California	Los Angeles	South Bay	33.901117	-118.375079	4.0	181	39.9	southern-california/south-bay/southbay
+Southern California	Los Angeles	Encino	34.158832	-118.500779	3.9	101	50.2	southern-california/the-valley/encino
+Southern California	Los Angeles	Glendale	34.156986	-118.256478	3.9	141	40.9	southern-california/the-valley/glendale
+Southern California	Los Angeles	Pasadena	34.14481	-118.14532	4.0	129	36.9	southern-california/the-valley/pasadena
+Southern California	Los Angeles	Studio City	34.145972	-118.413531	4.2	225	43.2	southern-california/studiocity
+Southern California	Los Angeles	Westlake Village	34.156885	-118.815769	4.0	91	49.6	southern-california/the-valley/westlakevillage
+Southern California	Los Angeles	Woodland Hills	34.178902	-118.598809	3.7	141	41.7	southern-california/the-valley/woodlandhills
+Tennessee	Nashville	South Gulch	36.150817	-86.779599	5.0	1	31.5	tennessee/south-gulch
+Texas	Austin	Austin	30.253956	-97.747739	3.2	271	35.7	texas/austin
+Texas	Dallas	Highland Park	32.817818	-96.803024	3.4	284	47.5	texas/highlandpark-dallas
+Texas	Dallas	Plano	33.029528	-96.832572	4.0	229	45.1	texas/plano
+Texas	Houston	River Oaks	29.741992	-95.452969	3.4	288	48.0	texas/riveroaks
+Washington	Seattle	Rainier Square	47.60938	-122.334914	3.0	212	38.4	washington/rainiersquare
+Washington DC	Washington	Anthem Row	38.901554	-77.022771	3.4	100	34.1	washington-dc/anthemrow
+Washington DC	Washington	Bethesda	38.982228	-77.096427	3.6	133	42.7	washington-dc/bethesda
+Washington DC	Washington	Sports Club D.C.	38.904776	-77.049053	3.5	301	27.1	washington-dc/sportsclubwashingtondc
+Washington DC	Washington	Tysons Corner	38.912721	-77.224751	3.4	154	39.4	washington-dc/tysonscorner
+Washington DC	Washington	Wisconsin Ave	38.94058	-77.077995	3.9	59	39.7	washington-dc/wisconsinave
